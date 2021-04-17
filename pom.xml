@@ -12,7 +12,9 @@ http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<groupId>ru.zhivenkov</groupId>
 	<artifactId>restSMS</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<packaging>war</packaging>
+
 	<name>restSMS</name>
 	<description>Rest API for send message, receive</description>
 	<properties>
