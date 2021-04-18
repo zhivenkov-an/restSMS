@@ -1,8 +1,13 @@
-package ru.zhivenkov.restSMS.services;
+package ru.zhivenkov.restSMS.repository;
 
-public class SmsRequest {
-    private int smsId;
+public class Sms {
+    private Integer smsId;
     private String smsValue;
+
+    public Sms(int smsId, String smsValue) {
+        this.smsId = smsId;
+        this.smsValue = smsValue;
+    }
 
     public int getSmsId() {
         return smsId;

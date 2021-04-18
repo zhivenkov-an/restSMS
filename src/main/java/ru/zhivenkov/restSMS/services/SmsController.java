@@ -1,5 +1,12 @@
 package ru.zhivenkov.restSMS.services;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.zhivenkov.restSMS.repository.Sms;
+import ru.zhivenkov.restSMS.repository.SmsDAO;
+import org.springframework.http.MediaType;
+
+
+import java.util.List;
 
 @RestController
 public class SmsController {
@@ -9,7 +16,10 @@ public class SmsController {
     public static final String SUCCESS_STATUS = "success";
     public static final String ERROR_STATUS = "error";
     public static final int CODE_SUCCESS = 100;
-    public static final int AUTH_FAILUER = 102;
+    public static final int AUTH_FAILURE = 102;
+
+    @Autowired
+    private SmsDAO smsDAO;
 
 
     @RequestMapping("/")
@@ -25,7 +35,7 @@ public class SmsController {
 
     @PostMapping("/sendsms")
     public BaseResponse sendSms(@RequestParam(value = "key") String key,
-                                @RequestBody SmsRequest requestSMS){
+                                @RequestBody Sms requestSMS){
 
         final BaseResponse response;
 
@@ -38,12 +48,18 @@ public class SmsController {
             response = new BaseResponse(SUCCESS_STATUS,CODE_SUCCESS);
         }
         else{
-            response = new BaseResponse(ERROR_STATUS,AUTH_FAILUER);
+            response = new BaseResponse(ERROR_STATUS, AUTH_FAILURE);
         }
 
         return response;
     }
 
+    @GetMapping(value="/smses",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public List<Sms> getSmses(){
+        return smsDAO.getAllSmses();
+    }
 
 
 }
