@@ -61,5 +61,36 @@ public class SmsController {
         return smsDAO.getAllSmses();
     }
 
+    @GetMapping(value = "/smses/{smsId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public Sms getSms(@PathVariable("smsId") Integer smsId){
+        return  smsDAO.getSms(smsId);
+    }
+
+    @PostMapping(value = "/smses",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public Sms addSms(@RequestBody Sms sms){
+        System.out.println("(Service Side) Creating new sms: " + sms.getSmsId());
+        return smsDAO.addSms(sms);
+    }
+
+    @PutMapping(value = "/smses",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public Sms updateSms(@RequestBody Sms sms){
+        System.out.println("(Service Side) Editing sms: " + sms.getSmsId());
+        return smsDAO.updateSms(sms);
+    }
+
+    @DeleteMapping(value = "/smses/{smsId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public void deleteSms(@PathVariable("smsId") Integer smsId){
+        smsDAO.deleteSms(smsId);
+    }
+
+
 
 }

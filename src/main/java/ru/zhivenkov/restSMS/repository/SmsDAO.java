@@ -35,8 +35,8 @@ public class SmsDAO {
         return newSms;
     }
 
-    public void deleteSms(Sms sms){
-        smsMap.remove(sms);
+    public void deleteSms(Integer smsId){
+        smsMap.remove(smsId);
     }
 
     public List<Sms> getAllSmses(){
