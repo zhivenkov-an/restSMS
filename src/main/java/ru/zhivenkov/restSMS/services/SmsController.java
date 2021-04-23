@@ -1,5 +1,6 @@
 package ru.zhivenkov.restSMS.services;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.web.bind.annotation.*;
 import ru.zhivenkov.restSMS.repository.Sms;
 import ru.zhivenkov.restSMS.repository.SmsDAO;
@@ -18,8 +19,11 @@ public class SmsController {
     public static final int CODE_SUCCESS = 100;
     public static final int AUTH_FAILURE = 102;
 
-    @Autowired
-    private SmsDAO smsDAO;
+    private final SmsDAO smsDAO;
+
+    public SmsController(SmsDAO smsDAO) {
+        this.smsDAO = smsDAO;
+    }
 
 
     @RequestMapping("/")
