@@ -2,10 +2,9 @@ package ru.zhivenkov.restSMS.services;
 
 
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.zhivenkov.restSMS.repository.SmsDb;
+import ru.zhivenkov.restSMS.repository.SmsDbRepository;
 import ru.zhivenkov.restSMS.repository.SmsRepository;
 
 import java.util.List;
@@ -14,14 +13,23 @@ import java.util.List;
 public class SmsDbController implements SmsService{
 
     private final SmsRepository smsRepository;
+    private final SmsDbRepository smsDbRepository;
 
-    public SmsDbController(SmsRepository smsRepository) {
+    public SmsDbController(SmsRepository smsRepository,SmsDbRepository smsDbRepository) {
         this.smsRepository = smsRepository;
+        this.smsDbRepository = smsDbRepository;
     }
 
     @Override
-    public void create(SmsDb smsDb) {
-        smsRepository.save(smsDb);
+    @PostMapping(value = "/smsdbes",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public void create(@RequestBody SmsDb smsDb) {
+        System.out.println("(Service Side) Insert new smsDb: " + smsDb.getId());
+        if (! smsRepository.existsById(smsDb.getId())) {
+            smsRepository.save(smsDb);
+        }
+
     }
 
     @Override
@@ -37,13 +45,16 @@ public class SmsDbController implements SmsService{
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     public SmsDb read(@PathVariable("smsId") int smsId) {
-        return smsRepository.findById(smsId).get();
+        return smsRepository.findById(smsId).orElse(null);
     }
 
-    @Override
-    public boolean update(SmsDb smsDb, int id) {
-        if (smsRepository.existsById(id)) {
-            smsDb.setId(id);
+
+    @PutMapping(value = "/smsdbes",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public boolean update(@RequestBody SmsDb smsDb) {
+        if (smsRepository.existsById(smsDb.getId())) {
+            //smsDb.setId(smsDb.getId());
             smsRepository.save(smsDb);
             return true;
         }
@@ -52,11 +63,38 @@ public class SmsDbController implements SmsService{
     }
 
     @Override
-    public boolean delete(int id) {
+    @DeleteMapping(value = "/smsdbes/{smsId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public boolean delete(@PathVariable("smsId") int id) {
         if (smsRepository.existsById(id)) {
             smsRepository.deleteById(id);
             return true;
         }
         return false;
     }
+
+/*
+    @GetMapping(value = "/smsfind/{word}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public List<SmsDb> findByWord(@PathVariable("word") String word) {
+        // список новостей в которых встречается ключевое слово
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ru.zhivenkov.restSMS.jpa.hibernate");
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+
+
+    }
+*/
+
+    @GetMapping(value = "/smsfindbyauthor/{authorId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public List<SmsDb> findByAuthor(@PathVariable("authorId") int authorId) {
+        // список СМС по автору
+        return smsDbRepository.findSmsByAuthorId(authorId);
+    }
+
+
 }

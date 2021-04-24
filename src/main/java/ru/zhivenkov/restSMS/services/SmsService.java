@@ -28,10 +28,9 @@ public interface SmsService{
      * Обновляет СМС с заданным ID,
      * в соответствии с переданным клиентом
      * @param smsDb - СМС в соответсвии с которым нужно обновить данные
-     * @param id - id СМС которого нужно обновить
      * @return - true если данные были обновлены, иначе false
      */
-    boolean update(SmsDb smsDb, int id);
+    boolean update(SmsDb smsDb);
 
     /**
      * Удаляет СМС с заданным ID
