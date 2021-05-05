@@ -1,4 +1,4 @@
-package ru.zhivenkov.restSMS.services;
+package ru.zhivenkov.restSMS.service;
 
 import ru.zhivenkov.restSMS.repository.SmsDb;
 

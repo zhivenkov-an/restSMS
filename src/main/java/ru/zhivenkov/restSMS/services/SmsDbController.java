@@ -1,23 +1,29 @@
 package ru.zhivenkov.restSMS.services;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.zhivenkov.restSMS.repository.SmsDb;
 import ru.zhivenkov.restSMS.repository.SmsDbRepository;
 import ru.zhivenkov.restSMS.repository.SmsRepository;
+import ru.zhivenkov.restSMS.service.SmsDbService;
+import ru.zhivenkov.restSMS.service.SmsService;
 
 import java.util.List;
 
 @RestController
-public class SmsDbController implements SmsService{
+public class SmsDbController implements SmsService {
 
     private final SmsRepository smsRepository;
     private final SmsDbRepository smsDbRepository;
 
-    public SmsDbController(SmsRepository smsRepository,SmsDbRepository smsDbRepository) {
+    private  final SmsDbService smsDbService;
+
+    public SmsDbController(SmsRepository smsRepository, SmsDbRepository smsDbRepository, SmsDbService smsDbService) {
         this.smsRepository = smsRepository;
         this.smsDbRepository = smsDbRepository;
+        this.smsDbService = smsDbService;
     }
 
     @Override
@@ -95,6 +101,16 @@ public class SmsDbController implements SmsService{
         // список СМС по автору
         return smsDbRepository.findSmsByAuthorId(authorId);
     }
+
+
+
+    @GetMapping(value="/smsdbes_jooq",
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public List<SmsDb> readAllJooq() {
+        return smsDbService.getSmsDb();
+    }
+
 
 
 }
